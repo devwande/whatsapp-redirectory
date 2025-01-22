@@ -69,20 +69,20 @@
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            var results = regex.exec(location.search);
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         }
 
-        var orderId = getUrlParameter('id');
+        const orderId = getUrlParameter('id');
         
-        var confirmationCode = generateRandomCode();
+        const confirmationCode = generateRandomCode();
 
         document.getElementById('orderId').textContent = orderId;
         document.getElementById('confirmationCode').textContent = confirmationCode;
 
-        var whatsappButton = document.getElementById('whatsappButton');
-        whatsappButton.href = "https://wa.me/+2348139918964?text=Hi,%20my%20order%20ID%20is%20" + orderId + "%20and%20my%20confirmation%20code%20is%20" + confirmationCode;
+        const whatsappButton = document.getElementById('whatsappButton');
+        whatsappButton.href = "https://wa.me/+2348110618794?text=Hi,%20my%20order%20ID%20is%20" + orderId + "%20and%20my%20confirmation%20code%20is%20" + confirmationCode;
     </script>
 </body>
 </html>
