@@ -50,7 +50,7 @@
     <div class="container">
         <h1>Thank you for your order!</h1>
         
-        <p>Your order ID is: <span id="orderId"></span></p>
+        <p>Your order ID is: <span id="orderId">Loading...</span></p>
         <p>Your confirmation code is: <span id="confirmationCode"></span></p>
         
         <p>Please click the button below to chat with our writers on WhatsApp. Make sure to provide them with your order ID and confirmation code.</p>
@@ -63,26 +63,36 @@
     </div>
 
     <script>
+        // Generate a random confirmation code
         function generateRandomCode() {
             return Math.floor(100000 + Math.random() * 900000);
         }
 
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        // Fetch the order ID from the backend
+        async function fetchOrderId() {
+            try {
+                const response = await fetch('http://localhost:3000/api/orders');
+                const orders = await response.json();
+                const orderId = orders.length > 0 ? orders[0].id : 'No orders found';
+                
+                // Display the order ID
+                document.getElementById('orderId').textContent = orderId;
+
+                // Generate and display the confirmation code
+                const confirmationCode = generateRandomCode();
+                document.getElementById('confirmationCode').textContent = confirmationCode;
+
+                // Update the WhatsApp button link
+                const whatsappButton = document.getElementById('whatsappButton');
+                whatsappButton.href = `https://wa.me/+2348139297104?text=Hi,%20my%20order%20ID%20is%20${orderId}%20and%20my%20confirmation%20code%20is%20${confirmationCode}`;
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                document.getElementById('orderId').textContent = 'Error fetching order ID';
+            }
         }
 
-        const orderId = getUrlParameter('id');
-        
-        const confirmationCode = generateRandomCode();
-
-        document.getElementById('orderId').textContent = orderId;
-        document.getElementById('confirmationCode').textContent = confirmationCode;
-
-        const whatsappButton = document.getElementById('whatsappButton');
-        whatsappButton.href = "https://wa.me/+2348139297104?text=Hi,%20my%20order%20ID%20is%20" + orderId + "%20and%20my%20confirmation%20code%20is%20" + confirmationCode;
+        // Call the function to fetch and display order details
+        fetchOrderId();
     </script>
 </body>
 </html>
